@@ -1,0 +1,584 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  :root {
+    --main: #1a3a6b;
+    --sky: #4a9eda;
+    --sky-light: #e8f4fd;
+    --sky-mid: #b8ddf5;
+    --accent: #2d6bb5;
+    --coral: #e85d4a;
+    --mint: #2ab5a0;
+    --white: #ffffff;
+    --gray: #f4f6f9;
+    --text: #1a2a3a;
+    --muted: #7a90a8;
+  }
+  .ping-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .phone-outer { position: relative; }
+  .phone {
+    width: 320px;
+    height: 620px;
+    background: var(--white);
+    border-radius: 40px;
+    border: 8px solid var(--main);
+    box-shadow: 0 0 0 2px #2d4a7a, 20px 20px 60px rgba(26,58,107,0.18);
+    overflow: hidden;
+    position: relative;
+  }
+  .notch {
+    width: 90px; height: 22px;
+    background: var(--main);
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto;
+    position: relative; z-index: 10;
+  }
+  .screens {
+    display: flex;
+    width: 300%;
+    height: 570px;
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  .screen {
+    width: 304px;
+    height: 570px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .dots {
+    position: absolute;
+    bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 20;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--sky-mid);
+    transition: all 0.3s; cursor: pointer;
+  }
+  .dot.active { background: var(--main); width: 18px; border-radius: 3px; }
+
+  /* 사이드바 */
+  .sidebar {
+    position: absolute;
+    top: 0; left: -260px;
+    width: 260px; height: 100%;
+    background: var(--main);
+    z-index: 100;
+    transition: left 0.3s cubic-bezier(.4,0,.2,1);
+    padding: 30px 0 20px;
+    border-radius: 0 20px 20px 0;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 99; display: none;
+  }
+  .sidebar-overlay.open { display: block; }
+  .sb-profile { padding: 16px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .sb-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--sky);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 10px;
+  }
+  .sb-nick { font-size: 15px; font-weight: 700; color: white; }
+  .sb-info { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; }
+  .sb-section { padding: 14px 20px 8px; }
+  .sb-section-title { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1px; margin-bottom: 8px; }
+  .sb-accounts { padding: 0; }
+  .sb-account-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 10px;
+    cursor: pointer; margin-bottom: 4px;
+    background: rgba(255,255,255,0.06);
+  }
+  .sb-account-item.active { background: rgba(74,158,218,0.3); }
+  .sb-acc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sky); }
+  .sb-acc-dot.active { background: #4aeda0; }
+  .sb-acc-name { font-size: 12px; color: rgba(255,255,255,0.8); flex: 1; }
+  .sb-acc-badge { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .sb-add-acc {
+    margin: 8px 0 0;
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 10px; padding: 8px;
+    text-align: center; font-size: 11px;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+  }
+  .sb-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; cursor: pointer; }
+  .sb-item-icon { font-size: 14px; width: 20px; text-align: center; }
+  .sb-item-text { font-size: 13px; color: rgba(255,255,255,0.85); }
+
+  /* 공통 */
+  .s1-top {
+    padding: 10px 16px 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .top-left { display: flex; align-items: center; gap: 8px; }
+  .user-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--sky-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; cursor: pointer;
+    border: 1.5px solid var(--sky-mid);
+  }
+  .logo { font-size: 20px; font-weight: 700; color: var(--main); letter-spacing: -0.5px; }
+  .time { font-size: 12px; color: var(--muted); }
+  .divider { margin: 0 16px; border: none; border-top: 1px solid #eef2f7; }
+  .section-title { padding: 10px 16px 6px; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; }
+
+  /* 화면1 */
+  .call-area {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 16px 0 12px;
+  }
+  .call-btn {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: var(--main);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 12px rgba(26,58,107,0.1), 0 0 0 24px rgba(74,158,218,0.07);
+    cursor: pointer; transition: transform 0.15s; font-size: 38px;
+  }
+  .call-btn:active { transform: scale(0.95); }
+  .call-label { margin-top: 10px; font-size: 13px; color: var(--muted); }
+  .call-sub { font-size: 11px; color: #b0c4d8; margin-top: 3px; }
+
+  .meeting-list { padding: 0 12px; }
+  .meeting-item {
+    display: flex; align-items: center;
+    padding: 9px 12px; border-radius: 12px;
+    margin-bottom: 7px; background: var(--sky-light);
+    gap: 10px; cursor: pointer;
+    border: 1px solid var(--sky-mid);
+  }
+  .meeting-icon { font-size: 17px; }
+  .meeting-info { flex: 1; min-width: 0; }
+  .meeting-name { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .meeting-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .badge { font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 500; flex-shrink: 0; }
+  .badge-1 { background: #fde8e6; color: var(--coral); }
+  .badge-3 { background: #deeaf8; color: var(--main); }
+  .badge-7 { background: #d4f5f0; color: var(--mint); }
+  .new-meeting {
+    margin: 6px 12px 14px;
+    border: 1.5px dashed var(--sky-mid);
+    border-radius: 12px; padding: 9px;
+    text-align: center; font-size: 11px;
+    color: var(--sky); cursor: pointer;
+  }
+
+  /* 화면2 */
+  .mission-banner {
+    margin: 10px 12px 0;
+    background: var(--main);
+    border-radius: 14px;
+    padding: 11px 14px; cursor: pointer;
+  }
+  .mission-banner.open { border-radius: 14px 14px 0 0; }
+  .mission-top { display: flex; justify-content: space-between; align-items: center; }
+  .mission-label { font-size: 9px; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+  .mission-text { font-size: 12px; color: #fff; font-weight: 500; margin-top: 3px; }
+  .mission-arrow { font-size: 11px; color: rgba(255,255,255,0.6); transition: transform 0.3s; }
+  .mission-arrow.open { transform: rotate(180deg); }
+  .voice-list {
+    margin: 0 12px;
+    background: var(--sky-light);
+    border-radius: 0 0 14px 14px;
+    overflow: hidden; max-height: 0;
+    transition: max-height 0.35s ease;
+    border: 1px solid var(--sky-mid); border-top: none;
+  }
+  .voice-list.open { max-height: 150px; }
+  .voice-item {
+    display: flex; align-items: center;
+    padding: 7px 12px; gap: 8px;
+    border-bottom: 1px solid rgba(74,158,218,0.1);
+  }
+  .voice-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--main);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: white;
+  }
+  .voice-nick { font-size: 11px; color: var(--text); flex: 1; }
+  .voice-play { font-size: 14px; cursor: pointer; color: var(--sky); }
+  .voice-time { font-size: 10px; color: var(--muted); }
+
+  /* 달력 */
+  .cal-wrap { padding: 10px 12px 0; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .cal-month { font-size: 13px; font-weight: 700; color: var(--text); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+  .cal-day-label { font-size: 9px; color: var(--muted); padding: 2px 0; }
+  .cal-day {
+    font-size: 11px; padding: 4px 2px;
+    border-radius: 7px; cursor: pointer;
+    color: #444; position: relative;
+  }
+  .cal-day:hover { background: var(--sky-light); }
+  .cal-day.today { background: var(--main); color: white; font-weight: 700; }
+  .cal-day.has-diary::after {
+    content: ''; width: 3px; height: 3px;
+    background: var(--coral); border-radius: 50%;
+    position: absolute; bottom: 1px;
+    left: 50%; transform: translateX(-50%);
+  }
+  .cal-day.today.has-diary::after { background: var(--sky-light); }
+
+  /* 일기 목록 — 남는 공간 꽉 채우기 */
+  .diary-section { padding: 8px 12px 14px; }
+  .diary-section-header { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+  .diary-entry {
+    display: flex; gap: 8px;
+    padding: 8px 10px;
+    background: var(--sky-light);
+    border-radius: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border: 1px solid var(--sky-mid);
+  }
+  .diary-nick { font-size: 11px; color: var(--main); font-weight: 500; min-width: 44px; }
+  .diary-text { font-size: 10px; color: #556; line-height: 1.5; }
+
+  /* 화면3 */
+  .url-search {
+    margin: 10px 12px 8px;
+    display: flex; align-items: center;
+    background: var(--sky-light);
+    border-radius: 12px; padding: 7px 12px; gap: 8px;
+    border: 1px solid var(--sky-mid);
+  }
+  .url-search input {
+    border: none; background: transparent;
+    font-size: 12px; outline: none; flex: 1;
+    font-family: 'Noto Sans KR', sans-serif; color: var(--text);
+  }
+  .url-list { padding: 0 12px; }
+  .url-card {
+    background: var(--white);
+    border: 1px solid #e0eaf5;
+    border-radius: 12px; padding: 10px 12px;
+    margin-bottom: 8px; cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .url-card:hover { border-color: var(--sky); }
+  .url-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .url-card-meta { font-size: 10px; color: var(--muted); float: right; }
+  .url-card-desc { font-size: 10px; color: #7a8a9a; line-height: 1.4; margin-bottom: 5px; }
+  .url-card-link { font-size: 10px; color: var(--sky); }
+  .url-add {
+    margin: 4px 12px 14px;
+    border: 1.5px dashed var(--sky-mid);
+    border-radius: 12px; padding: 9px;
+    text-align: center; font-size: 11px;
+    color: var(--sky); cursor: pointer;
+  }
+
+  .nav-btns { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+  .nav-btn {
+    padding: 8px 20px; border-radius: 20px;
+    border: 1.5px solid var(--main);
+    background: white; color: var(--main);
+    font-size: 12px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--main); color: white; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+</style>
+
+<div class="ping-wrap">
+  <div class="phone-outer">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+      <div class="sidebar" id="sidebar">
+        <div class="sb-profile">
+          <div class="sb-avatar">🐧</div>
+          <div class="sb-nick">익명새벽</div>
+          <div class="sb-info">202611312 · 010-****-1234</div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-section-title">내 계정</div>
+          <div class="sb-accounts">
+            <div class="sb-account-item active">
+              <div class="sb-acc-dot active"></div>
+              <span class="sb-acc-name">익명새벽</span>
+              <span class="sb-acc-badge">사용 중</span>
+            </div>
+            <div class="sb-account-item">
+              <div class="sb-acc-dot"></div>
+              <span class="sb-acc-name">달빛고양이99</span>
+            </div>
+            <div class="sb-account-item">
+              <div class="sb-acc-dot"></div>
+              <span class="sb-acc-name">봄바람123</span>
+            </div>
+          </div>
+          <div class="sb-add-acc">+ 계정 추가</div>
+        </div>
+        <div class="sb-section" style="margin-top:8px;">
+          <div class="sb-section-title">설정</div>
+          <div class="sb-item"><span class="sb-item-icon">🔊</span><span class="sb-item-text">음성 변조 설정</span></div>
+          <div class="sb-item"><span class="sb-item-icon">🚫</span><span class="sb-item-text">차단 목록</span></div>
+          <div class="sb-item"><span class="sb-item-icon">📞</span><span class="sb-item-text">수신 거부 시간대</span></div>
+        </div>
+      </div>
+
+      <div class="screens" id="screens">
+
+        <!-- 화면1: 연결 -->
+        <div class="screen">
+          <div class="s1-top">
+            <div class="top-left">
+              <div class="user-icon" onclick="openSidebar()">👤</div>
+              <span class="logo">ping</span>
+            </div>
+            <span class="time">13:11</span>
+          </div>
+          <div class="call-area">
+            <div class="call-btn" id="callBtn">📞</div>
+            <div class="call-label">지금 바로 연결</div>
+            <div class="call-sub">우리 학교 누군가와</div>
+          </div>
+          <hr class="divider">
+          <div class="section-title">모임</div>
+          <div class="meeting-list">
+            <div class="meeting-item">
+              <div class="meeting-icon">👻</div>
+              <div class="meeting-info">
+                <div class="meeting-name">아까 귀신 얘기하신 분 들어와주세요</div>
+                <div class="meeting-meta">2명 참여 중</div>
+              </div>
+              <span class="badge badge-1">1일</span>
+            </div>
+            <div class="meeting-item">
+              <div class="meeting-icon">🍔</div>
+              <div class="meeting-info">
+                <div class="meeting-name">봉구스밥버거 12시 30분 오늘!</div>
+                <div class="meeting-meta">4명 참여 중</div>
+              </div>
+              <span class="badge badge-1">1일</span>
+            </div>
+            <div class="meeting-item">
+              <div class="meeting-icon">📚</div>
+              <div class="meeting-info">
+                <div class="meeting-name">도서관 팟 구해요</div>
+                <div class="meeting-meta">5명 참여 중</div>
+              </div>
+              <span class="badge badge-3">3일</span>
+            </div>
+            <div class="meeting-item">
+              <div class="meeting-icon">🌙</div>
+              <div class="meeting-info">
+                <div class="meeting-name">독서해요 (조용히)</div>
+                <div class="meeting-meta">8명 참여 중</div>
+              </div>
+              <span class="badge badge-7">7일</span>
+            </div>
+          </div>
+          <div class="new-meeting">+ 새 모임 만들기</div>
+        </div>
+
+        <!-- 화면2: 오늘 -->
+        <div class="screen">
+          <div class="s1-top">
+            <div class="top-left">
+              <div class="user-icon" onclick="openSidebar()">👤</div>
+              <span class="logo">ping</span>
+            </div>
+            <span class="time">13:11</span>
+          </div>
+          <div class="mission-banner" id="missionBanner">
+            <div class="mission-top">
+              <div>
+                <div class="mission-label">오늘의 미션</div>
+                <div class="mission-text">"오늘 하루를 색깔로 표현한다면?"</div>
+              </div>
+              <span class="mission-arrow" id="missionArrow">▼</span>
+            </div>
+          </div>
+          <div class="voice-list" id="voiceList">
+            <div class="voice-item">
+              <div class="voice-avatar">익</div>
+              <span class="voice-nick">익명새벽</span>
+              <span class="voice-play">▶</span>
+              <span class="voice-time">0:04</span>
+            </div>
+            <div class="voice-item">
+              <div class="voice-avatar" style="background:var(--coral)">달</div>
+              <span class="voice-nick">달빛고양이</span>
+              <span class="voice-play">▶</span>
+              <span class="voice-time">0:07</span>
+            </div>
+            <div class="voice-item">
+              <div class="voice-avatar" style="background:var(--mint)">봄</div>
+              <span class="voice-nick">봄바람123</span>
+              <span class="voice-play">▶</span>
+              <span class="voice-time">0:05</span>
+            </div>
+          </div>
+
+          <div class="cal-wrap">
+            <div class="cal-header">
+              <span class="cal-month">2026년 5월</span>
+              <span style="font-size:10px;color:var(--muted)">오늘 일기 ✏️</span>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day-label">일</div><div class="cal-day-label">월</div><div class="cal-day-label">화</div><div class="cal-day-label">수</div><div class="cal-day-label">목</div><div class="cal-day-label">금</div><div class="cal-day-label">토</div>
+              <div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day"></div><div class="cal-day has-diary">1</div><div class="cal-day has-diary">2</div><div class="cal-day">3</div>
+              <div class="cal-day has-diary">4</div><div class="cal-day">5</div><div class="cal-day has-diary">6</div><div class="cal-day has-diary">7</div><div class="cal-day has-diary">8</div><div class="cal-day">9</div><div class="cal-day">10</div>
+              <div class="cal-day has-diary">11</div><div class="cal-day has-diary">12</div><div class="cal-day">13</div><div class="cal-day has-diary">14</div><div class="cal-day has-diary">15</div><div class="cal-day">16</div><div class="cal-day has-diary">17</div>
+              <div class="cal-day has-diary">18</div><div class="cal-day has-diary">19</div><div class="cal-day">20</div><div class="cal-day has-diary">21</div><div class="cal-day has-diary">22</div><div class="cal-day has-diary">23</div><div class="cal-day has-diary">24</div>
+              <div class="cal-day has-diary">25</div><div class="cal-day today has-diary">26</div><div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+            </div>
+          </div>
+
+          <div class="diary-section">
+            <div class="diary-section-header">5월 26일 오늘 — 52명이 남겼어요</div>
+            <div class="diary-entry">
+              <span class="diary-nick">밤하늘⭐</span>
+              <span class="diary-text">발표 망한 것 같아서 집에 오는 내내 울었음. 근데 학식 돈까스는 맛있었다</span>
+            </div>
+            <div class="diary-entry">
+              <span class="diary-nick">감자칩🥔</span>
+              <span class="diary-text">오늘 도서관에서 모르는 사람이 지우개 빌려줬는데 왜 이렇게 감동이지</span>
+            </div>
+            <div class="diary-entry">
+              <span class="diary-nick">익명토끼</span>
+              <span class="diary-text">누군가랑 얘기하고 싶은 날인데 아무도 없어서 앱 켰음. 안녕 모두</span>
+            </div>
+            <div class="diary-entry">
+              <span class="diary-nick">구름빵☁️</span>
+              <span class="diary-text">수업 45분 지각했는데 교수님이 아무말도 안 하셨음. 오늘 하루 최고</span>
+            </div>
+            <div class="diary-entry">
+              <span class="diary-nick">새벽세시</span>
+              <span class="diary-text">시험공부 시작함. 내일 망할 것 같음. 파이팅 나</span>
+            </div>
+            <div class="diary-entry">
+              <span class="diary-nick">보라돌이💜</span>
+              <span class="diary-text">오늘 핑에서 전화했는데 목소리 되게 좋은 사람이었음. 또 걸릴 수 있으려나</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 화면3: 발견 -->
+        <div class="screen">
+          <div class="s1-top">
+            <div class="top-left">
+              <div class="user-icon" onclick="openSidebar()">👤</div>
+              <span class="logo">ping</span>
+            </div>
+            <span class="time">13:11</span>
+          </div>
+          <div class="url-search">
+            <span style="font-size:13px;color:var(--muted)">🔍</span>
+            <input placeholder="링크 검색..." id="urlSearch">
+          </div>
+          <div class="url-list" id="urlList">
+            <div class="url-card">
+              <div class="url-card-title">무료 폰트 사이트 모음 <span class="url-card-meta">방금</span></div>
+              <div class="url-card-desc">PPT 만들 때 진짜 유용한 무료 폰트들</div>
+              <div class="url-card-link">🔗 fonts.google.com</div>
+            </div>
+            <div class="url-card">
+              <div class="url-card-title">오늘 학식 메뉴 <span class="url-card-meta">3분 전</span></div>
+              <div class="url-card-desc">돈까스 진짜 맛있었음 내일도 나왔으면</div>
+              <div class="url-card-link">🔗 smu.ac.kr/cafeteria</div>
+            </div>
+            <div class="url-card">
+              <div class="url-card-title">유용한 단축키 정리 <span class="url-card-meta">8분 전</span></div>
+              <div class="url-card-desc">맥/윈도우 둘 다 있음. 모르면 손해</div>
+              <div class="url-card-link">🔗 shortcutfoo.com</div>
+            </div>
+            <div class="url-card">
+              <div class="url-card-title">로파이 플레이리스트 <span class="url-card-meta">15분 전</span></div>
+              <div class="url-card-desc">공부할 때 틀어두기 좋음</div>
+              <div class="url-card-link">🔗 youtube.com/watch?v=...</div>
+            </div>
+            <div class="url-card">
+              <div class="url-card-title">상명대 근처 맛집 지도 <span class="url-card-meta">22분 전</span></div>
+              <div class="url-card-desc">학교 앞 숨은 맛집 모아둔 구글맵</div>
+              <div class="url-card-link">🔗 maps.google.com/...</div>
+            </div>
+          </div>
+          <div class="url-add">+ 링크 남기기</div>
+        </div>
+      </div>
+
+      <div class="dots">
+        <div class="dot active" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="nav-btn" id="prevBtn" onclick="prev()" disabled>← 이전</button>
+      <button class="nav-btn" id="nextBtn" onclick="next()">다음 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let cur = 0;
+  const screens = document.getElementById('screens');
+  const dots = document.querySelectorAll('.dot');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  function goTo(n) {
+    cur = n;
+    screens.style.transform = `translateX(-${cur * 304}px)`;
+    dots.forEach((d,i) => d.classList.toggle('active', i===cur));
+    prevBtn.disabled = cur===0;
+    nextBtn.disabled = cur===2;
+  }
+  function prev() { if(cur>0) goTo(cur-1); }
+  function next() { if(cur<2) goTo(cur+1); }
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+  document.getElementById('missionBanner').addEventListener('click', () => {
+    const vl = document.getElementById('voiceList');
+    const arr = document.getElementById('missionArrow');
+    const isOpen = vl.classList.toggle('open');
+    arr.classList.toggle('open', isOpen);
+    document.getElementById('missionBanner').classList.toggle('open', isOpen);
+  });
+  let calling = false;
+  document.getElementById('callBtn').addEventListener('click', function() {
+    if(calling) return;
+    calling = true;
+    this.textContent = '⏳';
+    setTimeout(() => { this.textContent = '📞'; calling = false; }, 2000);
+  });
+  const allCards = document.querySelectorAll('.url-card');
+  document.getElementById('urlSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    allCards.forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+    });
+  });
+</script>
