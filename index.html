@@ -183,6 +183,146 @@
     color: var(--sky); cursor: pointer;
   }
 
+  /* 모드 토글 */
+  .mode-toggle {
+    display: flex; margin-top: 10px;
+    background: var(--sky-light); border-radius: 20px;
+    border: 1px solid var(--sky-mid); padding: 3px; width: 160px;
+  }
+  .mode-btn {
+    flex: 1; padding: 5px 8px; border-radius: 16px; border: none;
+    font-size: 11px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--muted); background: transparent; transition: all 0.2s;
+  }
+  .mode-btn.active { background: var(--main); color: white; }
+  /* 새 모임 인라인 폼 */
+  .new-meeting-form {
+    display: none; margin: 0 12px 10px;
+    border: 1.5px solid var(--sky); border-radius: 12px;
+    padding: 11px 12px; background: var(--sky-light);
+  }
+  .new-meeting-form.open { display: block; }
+  .form-link-row {
+    display: flex; align-items: center; gap: 6px;
+    background: white; border-radius: 8px;
+    padding: 6px 10px; margin-bottom: 9px; border: 1px solid var(--sky-mid);
+  }
+  .form-link-text { font-size: 10px; color: var(--sky); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .form-copy-btn {
+    font-size: 10px; padding: 3px 8px; background: var(--main); color: white;
+    border: none; border-radius: 6px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif; white-space: nowrap;
+  }
+  .copy-toast { font-size: 10px; color: var(--mint); height: 14px; margin-top: -4px; margin-bottom: 4px; }
+  .form-input {
+    width: 100%; border: 1px solid var(--sky-mid); border-radius: 8px;
+    padding: 7px 9px; font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text); outline: none; box-sizing: border-box; background: white; margin-bottom: 9px;
+  }
+  .form-duration-row { display: flex; gap: 6px; margin-bottom: 10px; }
+  .dur-btn {
+    flex: 1; padding: 5px 0; border-radius: 8px; border: 1.5px solid var(--sky-mid);
+    font-size: 11px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+    color: var(--muted); background: white; transition: all 0.15s;
+  }
+  .dur-btn.sel { background: var(--main); color: white; border-color: var(--main); }
+  .form-actions { display: flex; gap: 6px; }
+  .form-save {
+    flex: 1; padding: 7px; background: var(--main); color: white;
+    border: none; border-radius: 8px; font-size: 12px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .form-cancel {
+    padding: 7px 12px; background: white; color: var(--muted);
+    border: 1px solid var(--sky-mid); border-radius: 8px;
+    font-size: 12px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  }
+  /* 오버레이 패널 — phone 안 absolute, 기본 hidden */
+  .overlay-panel {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    z-index: 200; display: none; border-radius: 32px; overflow: hidden;
+    flex-direction: column;
+  }
+  .overlay-panel.open { display: flex; }
+  /* 취업 패널 */
+  .career-panel { background: white; overflow-y: auto; padding: 16px; flex: 1; min-height: 0; }
+  .career-back { font-size: 18px; cursor: pointer; margin-bottom: 12px; display: inline-block; color: var(--main); }
+  .career-title { font-size: 15px; font-weight: 700; color: var(--main); margin-bottom: 14px; }
+  .career-sub { font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; margin: 12px 0 6px; }
+  .chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 5px 11px; border-radius: 20px; border: 1.5px solid var(--sky-mid);
+    font-size: 11px; color: var(--text); cursor: pointer; transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif; background: white;
+  }
+  .chip.sel { background: var(--main); color: white; border-color: var(--main); }
+  .career-input {
+    width: 100%; border: 1.5px solid var(--sky-mid); border-radius: 10px;
+    padding: 8px 10px; font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text); outline: none; box-sizing: border-box; margin-top: 4px;
+  }
+  .sep-line { display: flex; align-items: center; gap: 8px; margin: 14px 0 10px; font-size: 10px; color: var(--muted); }
+  .sep-line::before, .sep-line::after { content:''; flex:1; border-top: 1px solid #eef2f7; }
+  .career-save {
+    margin-top: 18px; width: 100%; background: var(--main); color: white;
+    border: none; border-radius: 12px; padding: 11px; font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  }
+  /* 채팅 패널 */
+  .chat-inner { background: white; display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%; }
+  .chat-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px 10px; border-bottom: 1px solid #eef2f7; flex-shrink: 0;
+  }
+  .chat-back { font-size: 18px; cursor: pointer; color: var(--main); }
+  .chat-room-name { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chat-badge { font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 500; }
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px; scrollbar-width: none;
+    min-height: 0;
+  }
+  .chat-messages::-webkit-scrollbar { display: none; }
+  .chat-notice {
+    text-align: center; font-size: 10px; color: var(--muted);
+    background: var(--sky-light); border-radius: 8px; padding: 5px 10px; align-self: center;
+  }
+  .chat-input-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-top: 1px solid #eef2f7; flex-shrink: 0;
+  }
+  .chat-call-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--main);
+    border: none; font-size: 16px; cursor: pointer; flex-shrink: 0;
+  }
+  .chat-text-input {
+    flex: 1; border: 1.5px solid var(--sky-mid); border-radius: 20px;
+    padding: 7px 12px; font-size: 12px; font-family: 'Noto Sans KR', sans-serif; outline: none;
+  }
+  .chat-send-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--sky);
+    border: none; font-size: 14px; cursor: pointer; flex-shrink: 0; color: white;
+  }
+  /* 통화 화면 */
+  .call-inner {
+    background: var(--main); flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .call-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin-bottom: 16px;
+  }
+  .call-name { font-size: 16px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .call-status { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 40px; }
+  .call-timer { font-size: 28px; font-weight: 300; color: white; margin-bottom: 50px; letter-spacing: 2px; }
+  .call-end {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--coral);
+    border: none; font-size: 24px; cursor: pointer;
+  }
   /* 화면2 */
   .mission-banner {
     margin: 10px 12px 0;
@@ -338,6 +478,7 @@
           <div class="sb-item"><span class="sb-item-icon">🔊</span><span class="sb-item-text">음성 변조 설정</span></div>
           <div class="sb-item"><span class="sb-item-icon">🚫</span><span class="sb-item-text">차단 목록</span></div>
           <div class="sb-item"><span class="sb-item-icon">📞</span><span class="sb-item-text">수신 거부 시간대</span></div>
+          <div class="sb-item" onclick="openCareer()"><span class="sb-item-icon">💼</span><span class="sb-item-text">취업 설정</span></div>
         </div>
       </div>
 
@@ -354,13 +495,17 @@
           </div>
           <div class="call-area">
             <div class="call-btn" id="callBtn">📞</div>
-            <div class="call-label">지금 바로 연결</div>
-            <div class="call-sub">우리 학교 누군가와</div>
+            <div class="call-label" id="callLabel">지금 바로 연결</div>
+            <div class="call-sub" id="callSub">우리 학교 누군가와</div>
+            <div class="mode-toggle">
+              <button class="mode-btn active" id="modeRandom" onclick="setMode('random')">🍭 일반</button>
+              <button class="mode-btn" id="modeMentor" onclick="setMode('mentor')">✨ 선후배</button>
+            </div>
           </div>
           <hr class="divider">
           <div class="section-title">모임</div>
-          <div class="meeting-list">
-            <div class="meeting-item">
+          <div class="meeting-list" id="meetingList">
+            <div class="meeting-item" onclick="openChat('아까 귀신 얘기하신 분 들어와주세요','1')">
               <div class="meeting-icon">👻</div>
               <div class="meeting-info">
                 <div class="meeting-name">아까 귀신 얘기하신 분 들어와주세요</div>
@@ -368,7 +513,7 @@
               </div>
               <span class="badge badge-1">1일</span>
             </div>
-            <div class="meeting-item">
+            <div class="meeting-item" onclick="openChat('봉구스밥버거 12시 30분 오늘!','1')">
               <div class="meeting-icon">🍔</div>
               <div class="meeting-info">
                 <div class="meeting-name">봉구스밥버거 12시 30분 오늘!</div>
@@ -376,7 +521,7 @@
               </div>
               <span class="badge badge-1">1일</span>
             </div>
-            <div class="meeting-item">
+            <div class="meeting-item" onclick="openChat('도서관 팟 구해요','3')">
               <div class="meeting-icon">📚</div>
               <div class="meeting-info">
                 <div class="meeting-name">도서관 팟 구해요</div>
@@ -384,7 +529,7 @@
               </div>
               <span class="badge badge-3">3일</span>
             </div>
-            <div class="meeting-item">
+            <div class="meeting-item" onclick="openChat('독서해요 (조용히)','7')">
               <div class="meeting-icon">🌙</div>
               <div class="meeting-info">
                 <div class="meeting-name">독서해요 (조용히)</div>
@@ -393,7 +538,105 @@
               <span class="badge badge-7">7일</span>
             </div>
           </div>
-          <div class="new-meeting">+ 새 모임 만들기</div>
+          <!-- 인라인 폼 -->
+          <div class="new-meeting-form" id="newMeetingForm">
+            <div class="form-link-row">
+              <span class="form-link-text" id="autoLink">ping.app/room/a9f3k2</span>
+              <button class="form-copy-btn" onclick="copyLink()">복사</button>
+            </div>
+            <div class="copy-toast" id="copyToast"></div>
+            <input class="form-input" id="meetingInput" placeholder="모임 이름을 입력하세요" maxlength="30">
+            <div class="form-duration-row">
+              <button class="dur-btn" id="dur1" onclick="selectDur('1')">1일</button>
+              <button class="dur-btn" id="dur3" onclick="selectDur('3')">3일</button>
+              <button class="dur-btn" id="dur7" onclick="selectDur('7')">7일</button>
+            </div>
+            <div class="form-actions">
+              <button class="form-cancel" onclick="closeMeetingForm()">취소</button>
+              <button class="form-save" onclick="saveMeeting()">저장</button>
+            </div>
+          </div>
+          <div class="new-meeting" id="newMeetingBtn" onclick="openMeetingForm()">+ 새 모임 만들기</div>
+        </div>
+
+        <!-- 오버레이: 취업 패널 -->
+        <div class="overlay-panel" id="careerPanel">
+          <div class="career-panel">
+            <span class="career-back" onclick="closeCareer()">←</span>
+            <div class="career-title">💼 취업 선후배 설정</div>
+            <div class="career-sub">나의 정보</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">학과</div>
+            <div class="chip-group" id="myDept">
+              <button class="chip" onclick="pickChip(this,'myDept')">경영학과</button>
+              <button class="chip" onclick="pickChip(this,'myDept')">컴퓨터공학</button>
+              <button class="chip" onclick="pickChip(this,'myDept')">자유전공학부</button>
+              <button class="chip" onclick="pickChip(this,'myDept')">디자인학과</button>
+              <button class="chip" onclick="pickChip(this,'myDept')">미디어학과</button>
+              <button class="chip" onclick="pickChip(this,'myDept')">기타</button>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">성별</div>
+            <div class="chip-group" id="myGender">
+              <button class="chip" onclick="pickChip(this,'myGender')">남</button>
+              <button class="chip" onclick="pickChip(this,'myGender')">여</button>
+              <button class="chip" onclick="pickChip(this,'myGender')">상관없음</button>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">물어보고 싶은 한마디</div>
+            <input class="career-input" placeholder="예: 디자인 직군 포폴 어떻게 준비했나요?" maxlength="40">
+            <div class="sep-line">원하는 선배 조건</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">선배 학과</div>
+            <div class="chip-group" id="wantDept">
+              <button class="chip" onclick="pickChip(this,'wantDept')">경영학과</button>
+              <button class="chip" onclick="pickChip(this,'wantDept')">컴퓨터공학</button>
+              <button class="chip" onclick="pickChip(this,'wantDept')">자유전공학부</button>
+              <button class="chip" onclick="pickChip(this,'wantDept')">디자인학과</button>
+              <button class="chip" onclick="pickChip(this,'wantDept')">미디어학과</button>
+              <button class="chip" onclick="pickChip(this,'wantDept')">상관없음</button>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">선배 성별</div>
+            <div class="chip-group" id="wantGender">
+              <button class="chip" onclick="pickChip(this,'wantGender')">남</button>
+              <button class="chip" onclick="pickChip(this,'wantGender')">여</button>
+              <button class="chip" onclick="pickChip(this,'wantGender')">상관없음</button>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">연차 조건</div>
+            <div class="chip-group" id="wantLevel">
+              <button class="chip" onclick="pickChip(this,'wantLevel')">신입</button>
+              <button class="chip" onclick="pickChip(this,'wantLevel')">1~3년차</button>
+              <button class="chip" onclick="pickChip(this,'wantLevel')">3년 이상</button>
+              <button class="chip" onclick="pickChip(this,'wantLevel')">상관없음</button>
+            </div>
+            <button class="career-save" onclick="closeCareer()">저장하기</button>
+          </div>
+        </div>
+
+        <!-- 오버레이: 채팅 패널 -->
+        <div class="overlay-panel" id="chatPanel">
+          <div class="chat-inner">
+            <div class="chat-header">
+              <span class="chat-back" onclick="closeChat()">←</span>
+              <span class="chat-room-name" id="chatRoomName">모임</span>
+              <span class="chat-badge" id="chatRoomBadge">1일</span>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+              <div class="chat-notice">방이 생성됐어요. 링크를 공유해보세요 🔗</div>
+            </div>
+            <div class="chat-input-row">
+              <button class="chat-call-btn" onclick="startCall()">📞</button>
+              <input class="chat-text-input" id="chatInput" placeholder="">
+              <button class="chat-send-btn" onclick="sendMsg()">➤</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오버레이: 통화 화면 -->
+        <div class="overlay-panel" id="callPanel">
+          <div class="call-inner">
+            <div class="call-avatar">👤</div>
+            <div class="call-name">익명의 누군가</div>
+            <div class="call-status" id="callStatus">연결 중...</div>
+            <div class="call-timer" id="callTimer">0:00</div>
+            <button class="call-end" onclick="endCall()">📵</button>
+          </div>
         </div>
 
         <!-- 화면2: 오늘 -->
@@ -538,20 +781,23 @@
 </div>
 
 <script>
+  /* ── 화면 스와이프 ── */
   let cur = 0;
-  const screens = document.getElementById('screens');
+  const screensEl = document.getElementById('screens');
   const dots = document.querySelectorAll('.dot');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   function goTo(n) {
     cur = n;
-    screens.style.transform = `translateX(-${cur * 304}px)`;
+    screensEl.style.transform = `translateX(-${cur * 304}px)`;
     dots.forEach((d,i) => d.classList.toggle('active', i===cur));
     prevBtn.disabled = cur===0;
     nextBtn.disabled = cur===2;
   }
   function prev() { if(cur>0) goTo(cur-1); }
   function next() { if(cur<2) goTo(cur+1); }
+
+  /* ── 사이드바 ── */
   function openSidebar() {
     document.getElementById('sidebar').classList.add('open');
     document.getElementById('overlay').classList.add('open');
@@ -560,6 +806,8 @@
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('open');
   }
+
+  /* ── 오늘의 미션 ── */
   document.getElementById('missionBanner').addEventListener('click', () => {
     const vl = document.getElementById('voiceList');
     const arr = document.getElementById('missionArrow');
@@ -567,6 +815,8 @@
     arr.classList.toggle('open', isOpen);
     document.getElementById('missionBanner').classList.toggle('open', isOpen);
   });
+
+  /* ── 랜덤 전화 버튼 ── */
   let calling = false;
   document.getElementById('callBtn').addEventListener('click', function() {
     if(calling) return;
@@ -574,6 +824,8 @@
     this.textContent = '⏳';
     setTimeout(() => { this.textContent = '📞'; calling = false; }, 2000);
   });
+
+  /* ── URL 검색 ── */
   const allCards = document.querySelectorAll('.url-card');
   document.getElementById('urlSearch').addEventListener('input', function() {
     const q = this.value.toLowerCase();
@@ -581,4 +833,120 @@
       card.style.display = card.textContent.toLowerCase().includes(q) ? 'block' : 'none';
     });
   });
+
+  /* ── 모드 토글 ── */
+  function setMode(mode) {
+    document.getElementById('modeRandom').classList.toggle('active', mode==='random');
+    document.getElementById('modeMentor').classList.toggle('active', mode==='mentor');
+    document.getElementById('callLabel').textContent = mode==='random' ? '지금 바로 연결' : '선후배 연결';
+    document.getElementById('callSub').textContent = mode==='random' ? '우리 학교 누군가와' : '취업 설정 기반으로 매칭';
+  }
+
+  /* ── 취업 패널 ── */
+  function openCareer() {
+    closeSidebar();
+    document.getElementById('careerPanel').classList.add('open');
+  }
+  function closeCareer() {
+    document.getElementById('careerPanel').classList.remove('open');
+  }
+  function pickChip(el, groupId) {
+    document.querySelectorAll('#'+groupId+' .chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+
+  /* ── 새 모임 폼 ── */
+  let selDur = '1';
+  function openMeetingForm() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+    document.getElementById('autoLink').textContent = 'ping.app/room/'+code;
+    document.getElementById('copyToast').textContent = '';
+    document.getElementById('meetingInput').value = '';
+    ['1','3','7'].forEach(d => document.getElementById('dur'+d).classList.remove('sel'));
+    selDur = '1';
+    document.getElementById('newMeetingForm').classList.add('open');
+    document.getElementById('newMeetingBtn').style.display = 'none';
+  }
+  function closeMeetingForm() {
+    document.getElementById('newMeetingForm').classList.remove('open');
+    document.getElementById('newMeetingBtn').style.display = '';
+  }
+  function copyLink() {
+    document.getElementById('copyToast').textContent = '✓ 복사 완료!';
+    setTimeout(() => document.getElementById('copyToast').textContent='', 1800);
+  }
+  function selectDur(d) {
+    selDur = d;
+    ['1','3','7'].forEach(x => document.getElementById('dur'+x).classList.toggle('sel', x===d));
+  }
+  const durEmoji = {'1':'🔴','3':'🔵','7':'🟢'};
+  const durCls   = {'1':'badge-1','3':'badge-3','7':'badge-7'};
+  function saveMeeting() {
+    const name = document.getElementById('meetingInput').value.trim();
+    if(!name) { document.getElementById('meetingInput').focus(); return; }
+    const d = selDur;
+    const item = document.createElement('div');
+    item.className = 'meeting-item';
+    item.setAttribute('onclick', `openChat('${name}','${d}')`);
+    item.innerHTML = `<div class="meeting-icon">${durEmoji[d]}</div>
+      <div class="meeting-info">
+        <div class="meeting-name">${name}</div>
+        <div class="meeting-meta">방금 생성 · 1명 참여 중</div>
+      </div>
+      <span class="badge ${durCls[d]}">${d}일</span>`;
+    document.getElementById('meetingList').insertBefore(item, document.getElementById('meetingList').firstChild);
+    closeMeetingForm();
+  }
+
+  /* ── 채팅 패널 ── */
+  function openChat(name, dur) {
+    document.getElementById('chatRoomName').textContent = name;
+    const badge = document.getElementById('chatRoomBadge');
+    badge.textContent = dur+'일';
+    badge.className = 'chat-badge ' + (durCls[dur]||'badge-1');
+    document.getElementById('chatMessages').innerHTML = '<div class="chat-notice">방이 생성됐어요. 링크를 공유해보세요 🔗</div>';
+    document.getElementById('chatPanel').classList.add('open');
+  }
+  function closeChat() {
+    document.getElementById('chatPanel').classList.remove('open');
+  }
+  function sendMsg() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    const msgs = document.getElementById('chatMessages');
+    const bubble = document.createElement('div');
+    bubble.style.cssText = 'display:flex;justify-content:flex-end;';
+    bubble.innerHTML = `<div style="background:var(--main);color:white;border-radius:14px 14px 2px 14px;padding:7px 11px;font-size:12px;max-width:200px;line-height:1.4;">${text}</div>`;
+    msgs.appendChild(bubble);
+    msgs.scrollTop = msgs.scrollHeight;
+    input.value = '';
+  }
+  document.getElementById('chatInput').addEventListener('keydown', e => { if(e.key==='Enter') sendMsg(); });
+
+  /* ── 통화 화면 ── */
+  let callTimer = null;
+  let callSec = 0;
+  function startCall() {
+    document.getElementById('callPanel').classList.add('open');
+    callSec = 0;
+    document.getElementById('callTimer').textContent = '0:00';
+    document.getElementById('callStatus').textContent = '연결 중...';
+    setTimeout(() => {
+      document.getElementById('callStatus').textContent = '통화 중';
+      callTimer = setInterval(() => {
+        callSec++;
+        const m = Math.floor(callSec/60);
+        const s = String(callSec%60).padStart(2,'0');
+        document.getElementById('callTimer').textContent = m+':'+s;
+        if(callSec >= 3) endCall();
+      }, 1000);
+    }, 800);
+  }
+  function endCall() {
+    clearInterval(callTimer);
+    document.getElementById('callPanel').classList.remove('open');
+  }
 </script>
