@@ -184,6 +184,17 @@
   }
 
   /* 모드 토글 */
+  .call-time-row {
+    display: flex; gap: 6px; margin-top: 8px;
+  }
+  .call-time-btn {
+    padding: 4px 12px; border-radius: 14px;
+    border: 1.5px solid var(--sky-mid);
+    font-size: 11px; cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--muted); background: white; transition: all 0.15s;
+  }
+  .call-time-btn.sel { background: var(--sky); color: white; border-color: var(--sky); }
   .mode-toggle {
     display: flex; margin-top: 10px;
     background: var(--sky-light); border-radius: 20px;
@@ -478,7 +489,7 @@
           <div class="sb-item"><span class="sb-item-icon">🔊</span><span class="sb-item-text">음성 변조 설정</span></div>
           <div class="sb-item"><span class="sb-item-icon">🚫</span><span class="sb-item-text">차단 목록</span></div>
           <div class="sb-item"><span class="sb-item-icon">📞</span><span class="sb-item-text">수신 거부 시간대</span></div>
-          <div class="sb-item" onclick="openCareer()"><span class="sb-item-icon">💼</span><span class="sb-item-text">취업 설정</span></div>
+          <div class="sb-item" onclick="openCareer()"><span class="sb-item-icon">✨</span><span class="sb-item-text">라떼 설정</span></div>
         </div>
       </div>
 
@@ -497,14 +508,27 @@
             <div class="call-btn" id="callBtn">📞</div>
             <div class="call-label" id="callLabel">지금 바로 연결</div>
             <div class="call-sub" id="callSub">우리 학교 누군가와</div>
+            <div class="call-time-row">
+              <button class="call-time-btn sel" id="time30" onclick="setCallTime('30')">30초</button>
+              <button class="call-time-btn" id="time60" onclick="setCallTime('60')">1분</button>
+              <button class="call-time-btn" id="time180" onclick="setCallTime('180')">3분</button>
+            </div>
             <div class="mode-toggle">
               <button class="mode-btn active" id="modeRandom" onclick="setMode('random')">🍭 일반</button>
-              <button class="mode-btn" id="modeMentor" onclick="setMode('mentor')">✨ 선후배</button>
+              <button class="mode-btn" id="modeMentor" onclick="setMode('mentor')">✨ 라떼</button>
             </div>
           </div>
           <hr class="divider">
           <div class="section-title">모임</div>
           <div class="meeting-list" id="meetingList">
+            <div class="meeting-item" onclick="openChat('☕ 커피콩 방','7')" style="background:#fff8f0;border-color:#f5d9b0;">
+              <div class="meeting-icon">☕</div>
+              <div class="meeting-info">
+                <div class="meeting-name" style="color:#7a4a1e;">커피콩 방 — 취업 한탄 고정방</div>
+                <div class="meeting-meta">항상 열려있어요</div>
+              </div>
+              <span class="badge" style="background:#f5d9b0;color:#7a4a1e;">상시</span>
+            </div>
             <div class="meeting-item" onclick="openChat('아까 귀신 얘기하신 분 들어와주세요','1')">
               <div class="meeting-icon">👻</div>
               <div class="meeting-info">
@@ -559,11 +583,11 @@
           <div class="new-meeting" id="newMeetingBtn" onclick="openMeetingForm()">+ 새 모임 만들기</div>
         </div>
 
-        <!-- 오버레이: 취업 패널 -->
-        <div class="overlay-panel" id="careerPanel">
-          <div class="career-panel">
+        <!-- 오버레이: 라떼 설정 패널 -->
+        <div class="overlay-panel" id="careerPanel" style="flex-direction:column;overflow:visible;border-radius:32px;overflow:hidden;">
+          <div style="flex:1;overflow-y:auto;background:white;padding:16px;scrollbar-width:none;min-height:0;-webkit-overflow-scrolling:touch;">
             <span class="career-back" onclick="closeCareer()">←</span>
-            <div class="career-title">💼 취업 선후배 설정</div>
+            <div class="career-title">✨ 라떼 설정</div>
             <div class="career-sub">나의 정보</div>
             <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">학과</div>
             <div class="chip-group" id="myDept">
@@ -574,16 +598,20 @@
               <button class="chip" onclick="pickChip(this,'myDept')">미디어학과</button>
               <button class="chip" onclick="pickChip(this,'myDept')">기타</button>
             </div>
-            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">성별</div>
-            <div class="chip-group" id="myGender">
-              <button class="chip" onclick="pickChip(this,'myGender')">남</button>
-              <button class="chip" onclick="pickChip(this,'myGender')">여</button>
-              <button class="chip" onclick="pickChip(this,'myGender')">상관없음</button>
+            <div style="font-size:10px;color:var(--muted);margin:6px 0 4px;display:flex;align-items:center;gap:4px;">
+              학번
+              <span style="font-size:9px;color:#b0c4d8;">(이메일에서 자동 추출)</span>
             </div>
-            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">물어보고 싶은 한마디</div>
-            <input class="career-input" placeholder="예: 디자인 직군 포폴 어떻게 준비했나요?" maxlength="40">
-            <div class="sep-line">원하는 선배 조건</div>
-            <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">선배 학과</div>
+            <div style="background:var(--sky-light);border:1px solid var(--sky-mid);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--muted);margin-bottom:4px;">202611312 · 자동 인식됨 ✓</div>
+            <div class="sep-line">라떼 상대 조건</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:5px;">학번 기준</div>
+            <div class="chip-group" id="wantYear">
+              <button class="chip" onclick="pickChip(this,'wantYear')">내 학번 위</button>
+              <button class="chip" onclick="pickChip(this,'wantYear')">내 학번 아래</button>
+              <button class="chip" onclick="pickChip(this,'wantYear')">동갑</button>
+              <button class="chip" onclick="pickChip(this,'wantYear')">상관없음</button>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">상대 학과</div>
             <div class="chip-group" id="wantDept">
               <button class="chip" onclick="pickChip(this,'wantDept')">경영학과</button>
               <button class="chip" onclick="pickChip(this,'wantDept')">컴퓨터공학</button>
@@ -592,20 +620,11 @@
               <button class="chip" onclick="pickChip(this,'wantDept')">미디어학과</button>
               <button class="chip" onclick="pickChip(this,'wantDept')">상관없음</button>
             </div>
-            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">선배 성별</div>
-            <div class="chip-group" id="wantGender">
-              <button class="chip" onclick="pickChip(this,'wantGender')">남</button>
-              <button class="chip" onclick="pickChip(this,'wantGender')">여</button>
-              <button class="chip" onclick="pickChip(this,'wantGender')">상관없음</button>
-            </div>
-            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">연차 조건</div>
-            <div class="chip-group" id="wantLevel">
-              <button class="chip" onclick="pickChip(this,'wantLevel')">신입</button>
-              <button class="chip" onclick="pickChip(this,'wantLevel')">1~3년차</button>
-              <button class="chip" onclick="pickChip(this,'wantLevel')">3년 이상</button>
-              <button class="chip" onclick="pickChip(this,'wantLevel')">상관없음</button>
-            </div>
-            <button class="career-save" onclick="closeCareer()">저장하기</button>
+            <div style="font-size:10px;color:var(--muted);margin:10px 0 5px;">라떼 상대에게 남기고 싶은 한 마디</div>
+            <input class="career-input" placeholder="예: 취업 준비 어떻게 시작하셨어요?" maxlength="40">
+          </div>
+          <div style="padding:12px 16px;background:white;border-top:1px solid #eef2f7;flex-shrink:0;">
+            <button class="career-save" onclick="closeCareer()" style="margin-top:0;">저장하기</button>
           </div>
         </div>
 
@@ -816,6 +835,13 @@
     document.getElementById('missionBanner').classList.toggle('open', isOpen);
   });
 
+  /* ── 통화 시간 선택 ── */
+  let selectedCallTime = 30;
+  function setCallTime(sec) {
+    selectedCallTime = parseInt(sec);
+    ['30','60','180'].forEach(t => document.getElementById('time'+t).classList.toggle('sel', t===sec));
+  }
+
   /* ── 랜덤 전화 버튼 ── */
   let calling = false;
   document.getElementById('callBtn').addEventListener('click', function() {
@@ -838,8 +864,8 @@
   function setMode(mode) {
     document.getElementById('modeRandom').classList.toggle('active', mode==='random');
     document.getElementById('modeMentor').classList.toggle('active', mode==='mentor');
-    document.getElementById('callLabel').textContent = mode==='random' ? '지금 바로 연결' : '선후배 연결';
-    document.getElementById('callSub').textContent = mode==='random' ? '우리 학교 누군가와' : '취업 설정 기반으로 매칭';
+    document.getElementById('callLabel').textContent = mode==='random' ? '지금 바로 연결' : '라떼 연결';
+    document.getElementById('callSub').textContent = mode==='random' ? '우리 학교 누군가와' : '라떼 설정 기반으로 매칭';
   }
 
   /* ── 취업 패널 ── */
@@ -941,7 +967,7 @@
         const m = Math.floor(callSec/60);
         const s = String(callSec%60).padStart(2,'0');
         document.getElementById('callTimer').textContent = m+':'+s;
-        if(callSec >= 3) endCall();
+        if(callSec >= selectedCallTime) endCall();
       }, 1000);
     }, 800);
   }
